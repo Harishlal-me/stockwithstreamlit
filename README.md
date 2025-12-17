@@ -1,6 +1,4 @@
-Here’s the same professional README, now with some related emojis added.
 
-Overview
 📈 AI Stock Oracle Pro – Stock Prediction with Streamlit
 AI Stock Oracle Pro is an interactive web application for stock price direction forecasting, built with Python, TensorFlow, and Streamlit.
 The app provides short‑term and weekly directional signals, probabilities, and visualizations for selected stocks.
