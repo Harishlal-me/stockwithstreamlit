@@ -1,333 +1,180 @@
-# 📈 LSTM Stock Prediction
-### Professional Trading Signals for Tech Stocks
+Here’s the same professional README, now with some related emojis added.
 
-[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-[![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-orange.svg)](https://www.tensorflow.org/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+Overview
+📈 AI Stock Oracle Pro – Stock Prediction with Streamlit
+AI Stock Oracle Pro is an interactive web application for stock price direction forecasting, built with Python, TensorFlow, and Streamlit.
+The app provides short‑term and weekly directional signals, probabilities, and visualizations for selected stocks.
 
-A calibrated multi-task LSTM model delivering actionable trading signals for 6 major tech stocks with **67.4% weekly direction accuracy** and **59.7% next-day accuracy**. Built for algorithmic trading with realistic performance expectations.
+✨ Features
+🧠 Streamlit web UI with a modern glassmorphism design
 
----
+🔁 Multi‑task LSTM model using 60‑day input sequences
 
-## 🎯 Live Predictions (December 17, 2025)
+🎯 Separate predictions for:
 
-| Stock | P(Week ↑) | Signal | Action | Edge |
-|-------|-----------|------------|--------|------|
-| **AAPL** | 35.9% | DOWN (MED) | SELL | 14.1% |
-| **MSFT** | 54.2% | HOLD (LOW) | HOLD | 4.2% |
-| **NVDA** | 37.2% | DOWN (MED) | SELL | 12.8% |
-| **AMZN** | 38.8% | DOWN (MED) | SELL | 11.2% |
-| **GOOGL** | 34.6% | DOWN (HIGH) | SELL | 15.4% |
-| **META** | 30.9% | DOWN (HIGH) | SELL | 19.1% |
+📅 Tomorrow’s direction (UP/DOWN)
 
-**Market Regime:** STRONGLY BEARISH (5/6 SELL signals)
+📆 Weekly direction (UP/DOWN)
 
----
+💵 Tomorrow return (regression)
 
-## 🚀 Quick Start
+💰 Weekly return (regression)
 
-### 1. Installation
+🚦 Probability‑based trading signals (BUY / SELL / HOLD) with clear thresholds
 
-```bash
-git clone https://github.com/Harishlal-me/stock-prediction.git
-cd stock-prediction
+📊 Probability bar chart and candlestick + volume charts
+
+🗂️ Historical data explorer with adjustable time window
+
+💾 Session‑based prediction caching for smooth UX
+
+🗂️ Project Structure
+text
+stockwithstreamlit/
+├─ config.py
+├─ predict.py
+├─ train.py
+├─ app.py                  # Streamlit app entry point
+├─ src/
+│  ├─ data_loader.py       # Data loading and preprocessing
+│  └─ ...                  # Extra utilities / modules
+├─ models/                 # Saved models / checkpoints
+├─ data/                   # Raw or processed market data
+├─ requirements.txt
+└─ README.md
+Adjust the structure above to match your actual folders if needed.
+
+⚙️ Installation
+Clone the repository
+
+bash
+git clone https://github.com/Harishlal-me/stockwithstreamlit.git
+cd stockwithstreamlit
+Create and activate a virtual environment (optional but recommended)
+
+bash
+python -m venv .venv
+# Windows
+.venv\Scripts\activate
+# macOS / Linux
+source .venv/bin/activate
+Install dependencies
+
+bash
 pip install -r requirements.txt
-```
-
-### 2. Get API Key (Free)
-
-1. Sign up at [EODHD.com](https://eodhd.com)
-2. Navigate to Dashboard → Copy your API key
-3. Edit `src/data_loader.py` and set:
-   ```python
-   EODHD_API_KEY = "your_api_key_here"
-   ```
-
-### 3. Train the Model
-
-```bash
-python train.py  # Downloads 15+ years of data and trains LSTM
-```
+🧪 Data and Training
+Place or configure your historical stock data under data/ (or wherever data_loader.py expects it).
 
-Training typically takes 10-20 minutes depending on hardware.
-
-### 4. Get Predictions
-
-```bash
-python predict.py --stock AAPL
-```
+Train the LSTM model:
 
-**Example Output:**
-
-```
-📈 AAPL PROFESSIONAL TRADING SIGNAL 📈
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-Week Direction: DOWN (MEDIUM CONFIDENCE)
-Probability UP: 35.9%
+bash
+python train.py
+This script should:
 
-🎯 RECOMMENDED ACTION: SELL
-📊 SIGNAL EDGE: 14.1% from neutral (50%)
+📥 Load and preprocess historical OHLCV + indicator features
 
-Model Performance: 67.4% weekly accuracy
-Last Updated: 2025-12-17
-```
+🏗️ Build and train the multi‑task LSTM network
 
-### 5. Batch Predictions
-
-```bash
-# PowerShell
-foreach ($stock in @("AAPL","MSFT","NVDA","AMZN","GOOGL","META")) {
-    python predict.py --stock $stock
-}
-
-# Bash
-for stock in AAPL MSFT NVDA AMZN GOOGL META; do
-    python predict.py --stock $stock
-done
-```
-
----
-
-## 🏗️ Architecture
-
-### Input Pipeline
-
-```
-60-day sequences × 20+ technical indicators
-├── OHLCV (Open, High, Low, Close, Volume)
-├── Returns (Daily price changes)
-├── RSI(14) - Relative Strength Index
-├── MACD + MACD Signal
-├── SMA(10/20/50) - Simple Moving Averages
-├── EMA(12/26) - Exponential Moving Averages
-├── Bollinger Bands
-├── Volume Ratio
-├── Volatility (20-day rolling)
-└── 15+ years historical data (2010-present)
-```
-
-### Model Architecture
+💽 Save the trained model/weights to the models/ directory, which predict.py will load.
 
-```
-Multi-Task LSTM Network
-├── LSTM Layer 1: 64 units (return_sequences=True)
-├── LSTM Layer 2: 32 units
-├── Dense Layer 1: 64 units (ReLU)
-├── Dropout: 0.3
-├── Dense Layer 2: 32 units (ReLU)
-└── Output Layer: 4 predictions
-    ├── Tomorrow Direction (binary classification)
-    ├── Week Direction (binary classification) ← PRIMARY
-    ├── Tomorrow Return (regression)
-    └── Week Return (regression)
-```
+⚠️ If the app shows an error about missing models, ensure python train.py ran successfully and that paths in config.py match your environment.
 
-### Signal Calibration
+▶️ Running the App
+Start the Streamlit app from the project root:
 
-```
-PROBABILITY THRESHOLDS:
-  UP signal:   P(Week ↑) ≥ 55.0%
-  DOWN signal: P(Week ↑) ≤ 45.0%
-  HOLD zone:   45.1% - 54.9% (neutral)
+bash
+streamlit run app.py
+Then open the local URL shown in the terminal (typically http://localhost:8501) in your browser.
 
-SIGNAL STRENGTH:
-  HIGH:   |Edge| ≥ 15.0%
-  MEDIUM: |Edge| = 8.0-14.9%
-  LOW:    |Edge| < 8.0%
+🖥️ Usage
+📌 Select a stock symbol from the sidebar.
 
-TRADING ACTIONS:
-  BUY:  P(Week ↑) ≥ 55%
-  SELL: P(Week ↑) ≤ 45%
-  HOLD: 45-55% (neutral zone)
-```
+🚀 Click “Generate AI Prediction” to run the LSTM model.
 
----
+View:
 
-## 📊 Performance Metrics
+💲 Current/reference price
 
-### Validation Accuracy (Out-of-Sample)
+📅 Tomorrow and weekly direction with probabilities
 
-| Timeframe | Accuracy | vs. Random |
-|-----------|----------|------------|
-| **Tomorrow** | 59.7% | +9.7% |
-| **Week** | **67.4%** | **+17.4%** |
+🚦 BUY / SELL / HOLD signal and signal strength
 
-### Industry Context
+📊 Probability bar chart for P(UP)
 
-| Source | Typical Accuracy |
-|--------|------------------|
-| Random Guessing | 50.0% |
-| Average Hedge Fund | 52-58% |
-| **This Model (Weekly)** | **67.4%** ✓ |
+Switch to the 📊 Market Data tab to inspect recent price and volume history via candlestick and volume charts.
 
-**Status:** Production-ready for weekly trading signals
+Read about architecture, features, and indicators in the ℹ️ About tab.
 
----
+🧬 Model Details
+Architecture: Multi‑task LSTM
 
-## 🛠️ Project Structure
+2 LSTM layers (e.g., 128 and 64 units)
 
-```
-stock-prediction/
-├── train.py                    # Main training pipeline
-├── predict.py                  # CLI for predictions
-├── config.py                   # Hyperparameters & thresholds
-├── requirements.txt            # Python dependencies
-├── src/
-│   ├── data_loader.py         # EODHD API + data caching
-│   ├── feature_engineer.py    # Technical indicator calculation
-│   ├── model_builder.py       # LSTM architecture definition
-│   └── trainer.py             # Training & validation logic
-├── models/
-│   └── lstm_stock_model.h5    # Trained model (67% accuracy)
-├── data/
-│   └── raw/                   # Cached historical stock data
-└── README.md
-```
+Shared representation with multiple output heads
 
----
+Inputs:
 
-## 🔧 Design Decisions
+60‑day sliding window of OHLCV
 
-### Why Weekly Predictions?
+20+ technical indicators (RSI, MACD, Bollinger Bands, moving averages, momentum, volume features, etc.)
 
-- Higher accuracy (67%) vs next-day (60%)
-- More stable trends, less noise
-- Better suited for swing trading strategies
+Outputs:
 
-### Why 45-55% Neutral Zone?
+📅 Tomorrow direction (binary classification)
 
-- Avoids overtrading on weak signals
-- Preserves capital during uncertain periods
-- Reduces transaction costs
+📆 Week direction (binary classification)
 
-### Why Edge-Based Confidence?
+💵 Tomorrow return (regression)
 
-- `Edge = |P(UP) - 50%|` measures signal strength
-- 15%+ edge = high conviction trades
-- Transparent, mathematically justified
+💰 Week return (regression)
 
-### Why Raw Probabilities?
+Metrics (example validation):
 
-- No artificial confidence inflation
-- Honest about model uncertainty
-- Enables proper position sizing
+Tomorrow direction: ~59–60% accuracy
 
----
+Weekly direction: ~67% accuracy
 
-## 📱 Advanced Usage
+You can tune the architecture, look‑back window, features, and thresholds in train.py, predict.py, and config.py.
 
-### Custom Thresholds
+🔧 Configuration
+Most configuration options (supported tickers, data paths, thresholds, etc.) are defined in config.py.
+Key items you may want to adjust:
 
-```bash
-python predict.py --stock AAPL --buy-threshold 0.60 --sell-threshold 0.40
-```
+🏷️ SUPPORTED_STOCKS list
 
-### Export to JSON
+📁 Model and data directories
 
-```bash
-python predict.py --stock AAPL --output json > signals.json
-```
+🚦 Probability thresholds for BUY / SELL / HOLD signals
 
-### Verbose Mode
+☁️ Deployment
+You can deploy the app using:
 
-```bash
-python predict.py --stock AAPL --verbose
-```
+🌐 Streamlit Community Cloud
 
----
+🐳 Docker + any cloud provider (AWS, GCP, Azure, etc.)
 
-## 🔮 Roadmap
+🚉 Heroku / Railway / other PaaS (if they support Streamlit + Python)
 
-- [ ] **Regime Filter:** Skip trades when SPY/QQQ shows conflicting signals
-- [ ] **Volatility Adjustment:** ATR/VIX-based position sizing
-- [ ] **Kelly Criterion:** Optimal bet sizing based on edge strength
-- [ ] **Live Tracking:** PnL logging with rolling accuracy metrics
-- [ ] **REST API:** FastAPI backend for programmatic access
-- [ ] **Web Dashboard:** React frontend with real-time updates
-- [ ] **Multi-Asset Support:** Extend to ETFs, commodities, crypto
+Basic deployment steps:
 
----
+✅ Ensure requirements.txt includes all dependencies.
 
-## 📚 Technical Details
+🔐 Configure environment variables and file paths for production.
 
-### Data Requirements
+▶️ Point the platform to run streamlit run app.py.
 
-- Minimum: 15 years historical data (2010-present)
-- Sequence length: 60 trading days
-- Update frequency: Daily after market close
+🛠️ Roadmap / Ideas
+➕ Add more asset classes (indices, ETFs, crypto)
 
-### Hardware Requirements
+📈 Include risk/return analytics and simple backtests
 
-- **Training:** 8GB RAM, takes ~15 min on CPU
-- **Inference:** <1 second per stock
-- **GPU:** Optional, speeds up training 5-10x
+🧩 Support multiple model variants or ensembles
 
-### Dependencies
+🔌 Integrate live price feeds separately from model features
 
-```
-tensorflow>=2.10.0
-pandas>=1.5.0
-numpy>=1.23.0
-ta>=0.10.0          # Technical analysis library
-scikit-learn>=1.1.0
-requests>=2.28.0
-```
+🧮 Add user‑defined thresholds and position sizing helpers
 
----
-
-## ⚠️ Disclaimer
-
-**This software is for educational and research purposes only.**
-
-- Past performance does not guarantee future results
-- Model accuracy can degrade over time (concept drift)
-- Always use proper risk management and position sizing
-- Consider transaction costs, slippage, and taxes
-- Never invest more than you can afford to lose
-- Consult a licensed financial advisor before trading
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome! Please:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/improvement`)
-3. Commit changes (`git commit -am 'Add new feature'`)
-4. Push to branch (`git push origin feature/improvement`)
-5. Open a Pull Request
-
----
-
-## 📄 License
-
-MIT License - Free for personal and commercial use.
-
-See [LICENSE](LICENSE) file for details.
-
----
-
-## 📞 Support
-
-- **Issues:** [GitHub Issues](https://github.com/Harishlal-me/stock-prediction/issues)
-- **Discussions:** [GitHub Discussions](https://github.com/Harishlal-me/stock-prediction/discussions)
-- **Email:** harishlal.me@gmail.com
-
----
-
-## ⭐ Acknowledgments
-
-If you find this project useful, please:
-- ⭐ Star the repository
-- 🐛 Report bugs or suggest features
-- 📢 Share with the trading community
-
-Built with realistic expectations for algorithmic trading. No promises of guaranteed returns, just transparent, calibrated signals based on historical patterns.
-
----
-
-**Last Updated:** December 17, 2025  
-**Model Version:** 1.0  
-**Weekly Accuracy:** 67.4%
+⚠️ Disclaimer
+This project is for educational and research purposes only.
+It is not financial advice. Stock markets are volatile and unpredictable; past performance does not guarantee future results.
+Always do your own research and consult a qualified financial advisor before making investment decisions.
