@@ -176,3 +176,11 @@ Basic deployment steps:
 This project is for educational and research purposes only.
 It is not financial advice. Stock markets are volatile and unpredictable; past performance does not guarantee future results.
 Always do your own research and consult a qualified financial advisor before making investment decisions.
+
+
+
+
+to be done:
+match the current price with the real current price 
+imporve ui ux 
+deploy in streamlit
