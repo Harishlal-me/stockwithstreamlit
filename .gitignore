@@ -1,0 +1,19 @@
+﻿# Virtual environment
+.venv/
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Models (optional – remove if you WANT to push model)
+models/*.h5
+
+# Environment variables
+.env
+
+# VS Code
+.vscode/
+
+# OS
+.DS_Store
